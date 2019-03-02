@@ -1,4 +1,4 @@
-//key等的配置文件
+// key等的配置文件
 // 引入SDK核心类
 let QQMapWX = require('../libs/qqmap-wx-jssdk.js');
 // 实例化API核心类
@@ -9,4 +9,3 @@ let qqmapsdk = new QQMapWX({
 module.exports = {
   qqmapsdk: qqmapsdk
 };
-

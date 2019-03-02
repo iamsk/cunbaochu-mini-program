@@ -65,6 +65,11 @@
   height: 144rpx;
 }
 
+.person button {
+  width: 144rpx;
+  height: 100rpx;
+}
+
 /* 详细位置展示 */
 .address{
   position: absolute;
@@ -97,7 +102,8 @@
 
 .address-btn{
   flex: 1;
-  text-align: center;
+  text-align: right;
+  margin-right: 10px;
   color: #666666;
 }
 

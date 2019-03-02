@@ -12,5 +12,10 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "小程序demo",
     "navigationBarTextStyle": "black"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于查看附近存包处"
+    }
   }
 }

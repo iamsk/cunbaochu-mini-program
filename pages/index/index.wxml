@@ -10,7 +10,8 @@
     markers="{{markers}}"
     show-location="true" 
     bindmarkertap="markertap" 
-    bindregionchange="regionchange">
+    bindregionchange="regionchange"
+    wx:if="{{map}}">
 
     <!-- 中心点标记点 -->
     <cover-view  class="center">
@@ -38,21 +39,24 @@
         <cover-view class="blur">{{title}}</cover-view>
         <cover-view class="detailed">{{address}}</cover-view> 
       </cover-view>
-      <cover-view class="address-btn" bindtap="clockInOut" 
+      <cover-view wx:if="{{hasUserInfo}}" class="address-btn" bindtap="clockInOut" 
         data-title="{{title}}" 
         data-address="{{address}}" 
         data-clocklat="{{movedlat}}" 
         data-clocklng="{{movedlng}}" >
-        打卡
+        贡献
       </cover-view>
     </cover-view>
 
     <!-- 个人中心图标 -->
-    <cover-view class="person" bindtap="toPerson">
+    <cover-view wx:if="{{!hasUserInfo && canIUse}}" class="person">
+      <button open-type="getUserInfo" bindgetuserinfo="getUserInfo">
+        登录
+      </button>
+    </cover-view>
+    <cover-view wx:else class="person" bindtap="toPerson">
       <cover-image style="" src="../../images/personal_center.png"></cover-image>
     </cover-view>
   </map>
   <!-- 地图显示结束 -->
 </view>
-
-

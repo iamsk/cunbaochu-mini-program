@@ -9,63 +9,21 @@ Page({
   data: {
     longitude: 0, //经度 
     latitude: 0,  //纬度 
-    scale: 18, //缩放级别，取值范围为5-18
+    scale: 17, //缩放级别，取值范围为5-18
     markers: [], //标记
     polyline: [], //路线
     searchValue: '',
     isHidden: true, //隐藏搜索列表
-    markersData: [  //后台返回的标记点数组 
-      {
-        "id": 1,  //Number
-        "placeName": "深圳大学", //String
-        "placeAddress": "",
-        "placeLongitude": 113.9366756402588, //Number
-        "placeLatitude": 22.53236865950445 //Number
-      }, {
-        "id": 2,
-        "placeName": "腾讯大厦",
-        "placeAddress": "",
-        "placeLongitude": 113.93470153442384,
-        "placeLatitude": 22.540058474209314
-      }, {
-        "id": 3,
-        "placeName": "桂庙新村",
-        "placeAddress": "",
-        "placeLongitude": 113.93349990478517,
-        "placeLatitude": 22.52650191497704
-      }, {
-        "id": 4,
-        "placeName": "竹子林",
-        "placeAddress": "",
-        "placeLongitude": 114.011887,
-        "placeLatitude": 22.536671
-      }, {
-        "id": 5,
-        "placeName": "福禄居",
-        "placeAddress": "",
-        "placeLongitude": 114.02272,
-        "placeLatitude": 22.539301
-      }, {
-        "id": 6,
-        "placeName": "香蜜公园",
-        "placeAddress": "",
-        "placeLongitude": 114.02157,
-        "placeLatitude": 22.54342
-      }, {
-        "id": 7,
-        "placeName": "东海国际中心",
-        "placeAddress": "",
-        "placeLongitude": 114.02039,
-        "placeLatitude": 22.53639
-      }
-    ],
-    address1: ''
+    markersData: [], //后台返回的标记点数组 
+    map: 0,
+    hasUserInfo: false,
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    app: app,
   },
 
   // 生命周期函数--监听页面加载
   onLoad: function() {
     
-
     // 使用 wx.createMapContext 获取 map 上下文
     this.mapCtx = wx.createMapContext('map')
     let that = this;
@@ -78,10 +36,10 @@ Page({
         let lat = res.latitude;
         that.setData({
           longitude: lng,
-          latitude: lat,
-          markers: that.getMarkersArr()
+          latitude: lat
         })
         that.getPoiList(lng, lat);
+        that.markersRequest(lng, lat)
       },
       fail: function(res) {
         wx.showModal({
@@ -100,7 +58,34 @@ Page({
       complete: function(res) {
           // console.log(res);
       }
-    })
+    });
+    console.log(app.globalData.userInfo)
+    if (app.globalData.userInfo) {
+      this.setData({
+        userInfo: app.globalData.userInfo,
+        hasUserInfo: true
+      })
+    } else if (this.data.canIUse) {
+      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+      // 所以此处加入 callback 以防止这种情况
+      app.userInfoReadyCallback = res => {
+        this.setData({
+          userInfo: res.userInfo,
+          hasUserInfo: true
+        })
+      }
+    } else {
+      // 在没有 open-type=getUserInfo 版本的兼容处理
+      wx.getUserInfo({
+        success: res => {
+          app.globalData.userInfo = res.userInfo
+          this.setData({
+            userInfo: res.userInfo,
+            hasUserInfo: true
+          })
+        }
+      })
+    }
   },
   
   onShow: function(){
@@ -109,7 +94,6 @@ Page({
   // 生命周期函数--监听页面初次渲染完成
   onReady: function() {
     // console.log(this.getMarkersArr());
-    
   },
 
   //获取中心点经纬度
@@ -119,11 +103,12 @@ Page({
     that.mapCtx.getCenterLocation({
       success: function(res){
         that.getPoiList(res.longitude, res.latitude)
+        that.markersRequest(res.longitude, res.latitude)
       }
     })
   },
 
-  //逆地址解析（坐标转地址） 展示目标地详细地址
+  //逆地址解析（坐标转地址）展示目标地详细地址
   getPoiList: function(lng, lat) {
     // console.log('经度：', lng, '纬度', latitude);
     let that = this;
@@ -170,19 +155,22 @@ Page({
 
   // 获取标记数组
   getMarkersArr: function() {
-    let market = []
-    for (let item of this.data.markersData) {
-      market.push(this.createMarker(item))
+    let that = this;
+    let markers = [];
+    
+    for (let item of that.data.markersData) {
+      markers.push(this.createMarker(item))
     }
-    return market;
+    return markers;
   },
 
   //创造标记点
   createMarker(point) {
-    let id = point.id;
-    let latitude = point.placeLatitude;
-    let longitude = point.placeLongitude;
-    let placeName = point.placeName;
+    let id = point.index;
+    let latitude = point.latitude;
+    let longitude = point.longitude;
+    let placeName = point.name;
+    let address = point.address;
     //标记点及其属性
     let marker = {
       id: id || 0,  //Number
@@ -218,17 +206,20 @@ Page({
     let that = this;
     let markerId = e.markerId;
     console.log('标记', markerId, e)
-    console.log(that.data.markersData[0])
+    console.log(that.data.markersData[e.markerId -1])
     wx.showModal({
-      title: '详细地址',
-      content: that.data.markersData[e.markerId -1].placeName,
-      showCancel: false,
-      confirmCancel: false,
-      confirmText: '确定',
+      title: that.data.markersData[e.markerId-1].name,
+      content: that.data.markersData[e.markerId-1].address,
+      confirmText: '导航',
       confirmColor: '#4D8AD7',
       success: function(res) {
         if (res.confirm) {
-          console.log('用户点击确定');
+          let dataset = {
+            title: that.data.markersData[e.markerId - 1].name,
+            longitude: that.data.markersData[e.markerId - 1].longitude,
+            latitude: that.data.markersData[e.markerId - 1].latitude,
+          }
+          that.clickNavigation(dataset);
         }
       }
     })
@@ -243,12 +234,26 @@ Page({
   /**
    * 数据请求-获取标记点数组
    */
-  markersRequest: function() {
-    let url = '/mock/5aded45053796b38dd26e970/comments#!method=get';
-    request.getRequest(url, '')
+  markersRequest: function(lng, lat) {
+    let that = this;
+    let url = '/search/';
+    let opt = {
+      longitude: lng,
+      latitude: lat
+    };
+    request.getRequest(url, opt)
       .then(res => {
-        let data = res.data;
-        console.log('接口请求的数据', data)
+        console.log('markersRequest: ', res.data);
+        that.setData({
+          markersData: res.data
+        });
+        console.log('markersRequest: ', that.data);
+        let markers = that.getMarkersArr();
+        console.log('markersRequest: ', markers);
+        that.setData({
+          markers: markers,
+          map: 1
+        });
       })
       .catch(res => {
         wx.showToast({
@@ -259,17 +264,17 @@ Page({
   },
 
   /**
-   * 数据请求-打卡
+   * 数据请求-提交存包处
    */
   clockRequest: function(opt) {
     console.log('传递的参数', opt)
-    let url = '/mock/5aded45053796b38dd26e970/comments#!method=get';
-    request.getRequest(url, opt)
+    let url = '/points/';
+    request.postRequest(url, opt)
       .then(res => {
         let data = res.data;
         console.log('接口请求的数据', data)
         wx.showToast({
-          title: '打卡成功~',
+          title: '提交成功~',
           icon: 'success',
           duration: 1000
         })
@@ -283,24 +288,10 @@ Page({
   },
 
   /**
-   * 点击打卡
+   * 点击贡献
    */
   clockInOut: function(e) {
-    //登录才可打卡
-    if(!app.globalData.loginStatus) {
-      wx.showModal({
-        title: '提示',
-        content: '请先登录~',
-        success: (res) => {
-          if (res.confirm) {
-            wx.navigateTo({
-              url: '/pages/login/login'
-            })
-          }
-        }
-      })
-    } else {
-      console.log('打卡请求', e)
+      console.log('提交请求', e)
       let that = this;
       let dataset = e.currentTarget.dataset;
       let title = dataset.title;
@@ -311,27 +302,28 @@ Page({
       //需要传递给后台的请求参数
       let opt = {
         userId: '',  //微信用户id String openid 用户的唯一标识
-        title: title, //地名 String
+        name: title, //地名 String
         address: address, //具体地址 String
-        lat: lat, //纬度 Number
-        lng: lng, //经度 Number
-        create_time: curtimeStamp //打卡当前时间戳 Number
+        latitude: lat, //纬度 Number
+        longitude: lng, //经度 Number
+        service_time: '',
+        linkman: '',
+        telephone: '',
       }
       wx.showModal({
-        title: '打卡签到',
+        title: '提交存包处',
         content: `地址：${title}`,
-        confirmText: '打卡',
+        confirmText: '提交',
         confirmColor: '#4D8AD7',
         cancelColor: '#999',
         success (res) {
           if (res.confirm) {
-            // that.clockRequest(opt);
+            that.clockRequest(opt);
           } else if (res.cancel) {
             console.log('用户点击取消')
           }
         }
       })
-    }
   },
 
   /**
@@ -353,12 +345,6 @@ Page({
           name: title,
           scale: that.data.scale
         })
-        // wx.openLocation({
-        //   latitude: 22.53236865950445,
-        //   longitude: 113.9366756402588,
-        //   name: '深圳大学',
-        //   scale: that.data.scale
-        // })
       },
       fail: function(res) {
         console.log('导航失败');
@@ -367,28 +353,49 @@ Page({
   },
 
   /**
+   * 点击导航
+   */
+  clickNavigation: function (dataset) {
+    let that = this;
+    let title = dataset.title;
+    let lat = dataset.latitude;
+    let lng = dataset.longitude;
+    console.log('经度', lng, '纬度', lat, '地址', title);
+    wx.getLocation({
+      type: 'gcj02',
+      success: function (res) {
+        wx.openLocation({
+          latitude: lat,
+          longitude: lng,
+          name: title,
+          scale: that.data.scale
+        })
+      },
+      fail: function (res) {
+        console.log('导航失败');
+      }
+    })
+  },
+  /**
+   * 获取用户信息
+   */
+  getUserInfo: function (e) {
+    console.log(e)
+    app.globalData.loginStatus = 1;
+    app.globalData.userInfo = e.detail.userInfo
+    this.setData({
+      userInfo: e.detail.userInfo,
+      hasUserInfo: true
+    })
+  },
+  /**
    * 点击个人图标，跳转个人中心
    */
   toPerson: function() {
     console.log('loginStatus', app.globalData.loginStatus);
-    if(!app.globalData.loginStatus) {
-      wx.showModal({
-        title: '提示',
-        content: '请先登录~',
-        success: (res) => {
-          if (res.confirm) {
-            wx.navigateTo({
-              url: '/pages/login/login'
-            })
-          }
-        }
-      })
-    } else {
       wx.navigateTo({
         url: '/pages/person/person'
       })
-    }
   }
 
 })
-

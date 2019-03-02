@@ -13,8 +13,8 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.0.4",
-	"appid": "wx0a6987d0409858a9",
-	"projectname": "%E5%9C%B0%E5%9B%BE%E6%89%93%E5%8D%A11.0.5",
+	"appid": "wxcb1b64fa80c4ed7b",
+	"projectname": "wechat-map-applet-angie",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
