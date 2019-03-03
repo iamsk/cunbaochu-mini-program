@@ -206,10 +206,10 @@ Page({
     let that = this;
     let markerId = e.markerId;
     console.log('标记', markerId, e)
-    console.log(that.data.markersData[e.markerId -1])
+    console.log(that.data.markersData[e.markerId])
     wx.showModal({
-      title: that.data.markersData[e.markerId-1].name,
-      content: that.data.markersData[e.markerId-1].address,
+      title: that.data.markersData[e.markerId].name,
+      content: that.data.markersData[e.markerId].address,
       confirmText: '导航',
       confirmColor: '#4D8AD7',
       success: function(res) {

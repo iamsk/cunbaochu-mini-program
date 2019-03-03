@@ -1,16 +1,8 @@
 <!--person.wxml-->
 <view class="content">
-  <!-- <view class="">
-    用户名：{{username}}
-  </view>
-  <view class="">
-    welcome！！！
-  </view> -->
-
   <view class="userInfo">
-    <image class='user-head' src='../../images/anonymous.jpeg'/>
-    <view class='user-name'>用户名：{{username}}</view>
+    <image class='user-head' src='{{avatar}}'/>
+    <view class='user-name'>{{username}}</view>
   </view>
-
   <view class='layout-btn' bindtap='logout'>退出登录</view>
 </view>

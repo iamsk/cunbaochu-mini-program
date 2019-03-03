@@ -7,9 +7,11 @@ Page({
   },
   onLoad: function () {
     let username = wx.getStorageSync('username');
-    console.log('username', username)
+    let avatar = wx.getStorageSync('avatar');
+    console.log('username&avatar: ', username, avatar)
     this.setData({
-      username: username
+      username: username,
+      avatar: avatar
     })
   },
 
@@ -19,7 +21,8 @@ Page({
   logout: function() {
     app.globalData.loginStatus = 0;
     wx.removeStorage({
-      key: 'username'
+      key: 'username',
+      key: 'avatar',
     })
     wx.reLaunch({
       url: '/pages/index/index'
