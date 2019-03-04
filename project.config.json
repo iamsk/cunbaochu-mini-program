@@ -12,9 +12,9 @@
 		"uglifyFileName": false
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.0.4",
+	"libVersion": "2.6.1",
 	"appid": "wx764b9aaff224c161",
-	"projectname": "wechat-map-applet-angie",
+	"projectname": "cunbaochu",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},

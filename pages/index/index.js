@@ -39,7 +39,7 @@ Page({
           latitude: lat
         })
         that.getPoiList(lng, lat);
-        that.markersRequest(lng, lat)
+        that.markersRequest(lng, lat);
       },
       fail: function(res) {
         wx.showModal({
@@ -56,7 +56,7 @@ Page({
         })
       },
       complete: function(res) {
-          // console.log(res);
+          console.log(res);
       }
     });
     console.log(app.globalData.userInfo)
@@ -118,7 +118,7 @@ Page({
         longitude: lng
       },
       get_poi: 1, //是否返回周边POI列表：1.返回；0不返回(默认)
-      poi_options: 'radius=3000;page_size=20;page_index=1;policy=1',
+      poi_options: 'radius=3000;page_size=1;page_index=1;policy=1',
       success: function(res) {
         let result = res.result;
         that.setData({
@@ -215,9 +215,9 @@ Page({
       success: function(res) {
         if (res.confirm) {
           let dataset = {
-            title: that.data.markersData[e.markerId - 1].name,
-            longitude: that.data.markersData[e.markerId - 1].longitude,
-            latitude: that.data.markersData[e.markerId - 1].latitude,
+            title: that.data.markersData[e.markerId].name,
+            longitude: that.data.markersData[e.markerId].longitude,
+            latitude: that.data.markersData[e.markerId].latitude,
           }
           that.clickNavigation(dataset);
         }
