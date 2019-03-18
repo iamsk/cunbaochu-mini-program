@@ -49,14 +49,9 @@
     </cover-view>
 
     <!-- 个人中心图标 -->
-    <!-- <cover-view wx:if="{{!hasUserInfo && canIUse}}" class="person">
-      <button open-type="getUserInfo" bindgetuserinfo="getUserInfo">
-        登录
-      </button>
-    </cover-view>
-    <cover-view wx:else class="person" bindtap="toPerson">
+    <cover-view class="person" bindtap="toPerson">
       <cover-image style="" src="../../images/personal_center.png"></cover-image>
-    </cover-view> -->
+    </cover-view>
   </map>
   <!-- 地图显示结束 -->
 </view>

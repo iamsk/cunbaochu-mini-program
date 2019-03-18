@@ -2,10 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/search/search",
-    "pages/login/login",
-    "pages/person/person",
-    "pages/search1/search1",
-    "pages/logs/logs"
+    "pages/person/person"
   ],
   "window": {
     "backgroundTextStyle": "light",

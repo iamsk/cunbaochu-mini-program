@@ -3,7 +3,8 @@ const app = getApp();
 
 Page({
   data: {
-    logs: []
+    hasUserInfo: false,
+    canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
   onLoad: function () {
     let username = wx.getStorageSync('username');

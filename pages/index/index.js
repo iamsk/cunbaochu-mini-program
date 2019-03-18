@@ -392,10 +392,8 @@ Page({
    * 点击个人图标，跳转个人中心
    */
   toPerson: function() {
-    console.log('loginStatus', app.globalData.loginStatus);
-      wx.navigateTo({
-        url: '/pages/person/person'
-      })
+    wx.navigateTo({
+      url: '/pages/person/person'
+    })
   }
-
 })

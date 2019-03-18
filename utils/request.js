@@ -4,10 +4,8 @@ let request = {
    * 网络请求
    */
   request: function(url, data, method) {
-    // let server = ''; //生产地址
+    let server = 'https://cbc.songfei.online'; //生产地址
     // let server = 'http://127.0.0.1:8000'; //测试地址
-    // '/login/loginManager?loginName=liujie&loginPwd=bmat-password'
-    let server = 'https://www.cunbaochu.com'; //测试域名（暂用easy mock模拟数据请求）
     return new Promise((resolve, reject) => {
       wx.request({
         url: server + url,
@@ -51,4 +49,3 @@ let request = {
 
 export default request;
 // module.exports = request;
-
