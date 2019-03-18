@@ -10,12 +10,10 @@ Page({
     longitude: 0, //经度 
     latitude: 0,  //纬度 
     scale: 17, //缩放级别，取值范围为5-18
-    markers: [], //标记
     searchValue: '',
     markersData: [], //后台返回的标记点数组 
-    map: 0,
+    markers: [], //标记
     hasUserInfo: false,
-    app: app,
   },
 
   // 生命周期函数--监听页面加载
@@ -61,7 +59,7 @@ Page({
     });
   },
   onShow: function(){
-    // this.requestMarkers();
+    // this.markersRequest();
   },
   // 生命周期函数--监听页面初次渲染完成
   onReady: function() {
@@ -209,8 +207,7 @@ Page({
         });
         let markers = that.getMarkersArr();
         that.setData({
-          markers: markers,
-          map: 1
+          markers: markers
         });
       })
       .catch(res => {

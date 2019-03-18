@@ -10,8 +10,7 @@
     markers="{{markers}}"
     show-location="true" 
     bindmarkertap="markertap" 
-    bindregionchange="regionchange"
-    wx:if="{{map}}">
+    bindregionchange="regionchange">
 
     <!-- 中心点标记点 -->
     <cover-view  class="center">
