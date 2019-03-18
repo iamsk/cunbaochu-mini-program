@@ -3,11 +3,9 @@
   <view class="userInfo">
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录</button>
     <block wx:else>
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      <image class="user-head" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="user-name">{{userInfo.nickName}}</text>
     </block>
-    <image class='user-head' src='{{avatar}}'/>
-    <view class='user-name'>{{username}}</view>
   </view>
-  <view class='layout-btn' bindtap='logout'>退出登录</view>
+  <view wx:if="{{hasUserInfo}}" class='layout-btn' bindtap='logout'>退出登录</view>
 </view>

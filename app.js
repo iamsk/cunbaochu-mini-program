@@ -15,6 +15,6 @@ App({
   globalData: {
     userInfo: null,
     res: 'ok',
-    loginStatus: 0
+    hasUserInfo: false
   }
 })
