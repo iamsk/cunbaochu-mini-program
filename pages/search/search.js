@@ -30,7 +30,7 @@ Page({
         util.showLoading('加载中');
         qqmapsdk.getSuggestion({
           keyword: value,
-          region: '深圳市',
+          // region: '深圳市',
           region_fix: 0,
           policy: 0,
           success: function(res) {

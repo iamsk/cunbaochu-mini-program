@@ -78,7 +78,6 @@ Page({
   },
   //逆地址解析（坐标转地址）展示目标地详细地址
   getPoiList: function(lng, lat) {
-    // console.log('经度：', lng, '纬度', latitude);
     let that = this;
     qqmapsdk.reverseGeocoder({
       location: {
@@ -103,7 +102,6 @@ Page({
   },
   //地址解析（地址转坐标）
   getAddress: function(lat, lng) {
-    // let address = e.currentTarget.dataset.address;
     let that = this;
     that.setData({
       latitude: lat,
@@ -251,7 +249,6 @@ Page({
       let address = dataset.address;
       let lat = dataset.clocklat;
       let lng = dataset.clocklng;
-      let curtimeStamp = + new Date();
       //需要传递给后台的请求参数
       let opt = {
         userId: '',  //微信用户id String openid 用户的唯一标识
@@ -259,9 +256,11 @@ Page({
         address: address, //具体地址 String
         latitude: lat, //纬度 Number
         longitude: lng, //经度 Number
-        service_time: '',
+        store_type: 1,
         linkman: '',
         telephone: '',
+        service_time: '',
+        images: '',
       }
       wx.showModal({
         title: '提交存包处',

@@ -4,8 +4,8 @@ let request = {
    * 网络请求
    */
   request: function(url, data, method) {
-    let server = 'https://cbc.songfei.online'; //生产地址
-    // let server = 'http://127.0.0.1:8000'; //测试地址
+    // let server = 'https://cbc.songfei.online'; //生产地址
+    let server = 'http://127.0.0.1:8000'; //测试地址
     return new Promise((resolve, reject) => {
       wx.request({
         url: server + url,
