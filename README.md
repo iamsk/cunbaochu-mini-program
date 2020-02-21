@@ -2,11 +2,7 @@
 
 存包处是一个微信小程序，用于查找附近的行李寄存点
 
-<figure class="third">
-    <img src="./ss1.png">
-    <img src="./ss2.png">
-    <img src="./qr.jpg">
-</figure>
+![附近](./ss1.png) ![导航](./ss2.png) ![二维码](./qr.jpg)
 
 源于我过年旅行，晚上的飞机回国，中午从酒店 checkout，拖着行李逛展很不方便，最后花钱定的酒店存起来了，想想周围有方便的行李寄存点应该不错
 
